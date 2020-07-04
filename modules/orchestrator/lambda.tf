@@ -10,7 +10,7 @@ resource "aws_lambda_function" "orchestrator" {
 
   environment {
     variables = {
-      EC2_Assume_Role_ARN = aws_iam_role.lambda_main.arn
+      EC2_Assume_Role_ARN = var.lambda_role_arn
     }
   }
 
@@ -18,8 +18,8 @@ resource "aws_lambda_function" "orchestrator" {
 
 data "archive_file" "orchestrator" {
   type        = "zip"
-  source_file = var.lambda_code
-  output_path = "ec2_orchestration.zip"
+  source_file = "./modules/orchestrator/code/ec2_orchestration.py"
+  output_path = "./modules/orchestrator/code/ec2_orchestration.zip"
 }
 
 # Lambda main role
@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "lambda_ec2_assume" {
   statement {
     effect    = "Allow"
     actions   = ["sts:AssumeRole"]
-    resources = [aws_iam_role.lambda_main.arn]
+    resources = [var.lambda_role_arn]
   }
 
 }

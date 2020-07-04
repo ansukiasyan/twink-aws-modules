@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "ec2_s3_read" {
   statement {
     effect    = "Allow"
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.html.arn}/${aws_s3_bucket_object.html.key}"]
+    resources = ["${var.s3_arn}/${var.s3_object_key}"]
   }
 
 }
@@ -85,7 +85,6 @@ resource "aws_iam_role" "lambda_main" {
   provider           = aws.dev
   name               = "labmda_access"
   assume_role_policy = data.aws_iam_policy_document.lambda_main.json
-
 }
 
 data "aws_iam_policy_document" "lambda_main_ec2" {
